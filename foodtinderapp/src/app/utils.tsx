@@ -1,10 +1,11 @@
 import fs from 'fs';
 import csvParser from 'csv-parser';
+// @ts-ignore
 import cosineSimilarity from 'cosine-similarity';
 import { cache } from 'react';
 
 const filePath = '../googleJsonResult.csv';
-const restaurantIds = [
+export const restaurantIds = [
   "ChIJXdxV_FEFlVQR-jNsGKb7cVI",
   "ChIJ1ZscbbsalVQRSbgiD4VyVvU",
   "ChIJf7Hdiu0PlVQRVY3EvQz9IG0",
@@ -30,7 +31,7 @@ const restaurantIds = [
 export interface Restaurant {
   name: string;
   place_name: string;
-  photos_photo_reference: string;
+  photos__photo_reference: string;
   place_id: string;
   plus_code__compound_code: string;
   price_level: string;
@@ -77,7 +78,7 @@ export const getSortedRecommendations = () => {
   const recommendations: [number, number][] = getUserRecommendations(1, userSimilarityMatrix, userItemMatrix);
   const rec_ids: string[] = [];
   recommendations.forEach(([item, rating]) => {
-    console.log(`Item${item}: ${rating.toFixed(2)}`);
+    // console.log(`Item${item}: ${rating.toFixed(2)}`);
     rec_ids.push(restaurantIds[item]);
   });
   return rec_ids;
@@ -85,10 +86,12 @@ export const getSortedRecommendations = () => {
 
 // Mock user-item matrix (to be replaced w mock data from supabase)
 const userItemMatrix: number[][] = [
-  [5, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  // Ratings for items by User1
-  [0, 0, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  // Ratings for items by User2
-  [5, 0, 4, 0, 0, 0, 10, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  // Ratings for items by User3
-  [0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  // Ratings for items by User4
+  [5, 4, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0],  // Ratings for items by User1
+  [0, 0, 3, 4, 2, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],  // Ratings for items by User2
+  [5, 0, 4, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  // Ratings for items by User3
+  [0, 5, 0, 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],  // Ratings for items by User4
+  [0, 0, 0, 0, 0, 5, 4, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0],  // Ratings for items by User5
+  [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 4, 0, 0, 0, 0, 0, 0, 3, 0],  // Ratings for items by User6
 ];
 
 // Function to calculate cosine similarity matrix between users
