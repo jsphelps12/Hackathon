@@ -1,16 +1,18 @@
 import RootLayout from "@/app/layout";
 import Link from "next/link";
-import { getRestaurants } from "../../utils";
+import { getRestaurantsById, getRecommendedRestaurantList, Restaurant } from "../../utils";
 
 export const revalidate = 3600
 
 export default async function Page({ params }: { params: { id: number }}) {
     const next_id = +params.id + +1;
-    const restaurants = await getRestaurants();
+    const restaurantsById: Map<string, Restaurant> = await getRestaurantsById();
+    const restaurants = getRecommendedRestaurantList();
 
     if (params.id >= restaurants.length) return <h1>No more suggestions</h1>;
 
-    const restaurant = restaurants[params.id];
+    const restaurant = restaurantsById.get(restaurants[params.id]);
+    if (!restaurant) return <h1>No more suggestions</h1>;
 
     return (
         <RootLayout>

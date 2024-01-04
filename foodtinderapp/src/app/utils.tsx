@@ -4,7 +4,7 @@ import { cache } from 'react';
 
 const filePath = '../googleJsonResult.csv';
 
-interface Restaurant {
+export interface Restaurant {
   name: string;
   place_name: string;
   photos_photo_reference: string;
@@ -16,7 +16,7 @@ interface Restaurant {
   vicinity: string;
 }
 
-export const getRestaurants = cache(async () => {
+export const getRestaurantsById = cache(async () => {
     let csv_data: Restaurant[] = [];
     
     const restaurants: Restaurant[] = await new Promise((resolve, reject) => {
@@ -43,5 +43,34 @@ export const getRestaurants = cache(async () => {
           reject(err);
         });
     });
-    return restaurants;
+    const map: Map<string, Restaurant> = new Map<string, Restaurant>();
+    restaurants.forEach((row) => map.set(row.place_id, row));
+
+    return map;
 });
+
+export const getRecommendedRestaurantList = () => {
+  // mock list of restaurants
+  return [
+    "ChIJXdxV_FEFlVQR-jNsGKb7cVI",
+    "ChIJ1ZscbbsalVQRSbgiD4VyVvU",
+    "ChIJf7Hdiu0PlVQRVY3EvQz9IG0",
+    "ChIJj-5sBU4FlVQRFdFemOmd4fo",
+    "ChIJ2WrLURcQlVQRikqa0hiFEDE",
+    "ChIJUXjP06QalVQR1ip77-vRHGA",
+    "ChIJUUJE66IalVQRqTwGMC449Kg",
+    "ChIJAw3f_VEFlVQR5Hd6s3YL3pQ",
+    "ChIJxzL2CVEFlVQRcoupdvRsOl4",
+    "ChIJi7RS308FlVQRLnZXH_KyOSM",
+    "ChIJj8p0hIcPlVQRHZTxzjpTj-0",
+    "ChIJyyLqLlAFlVQRak01OCytghs",
+    "ChIJlWJILVAFlVQRn5d6F0aEBeo",
+    "ChIJyyLqLlAFlVQRCnEd-YPKctk",
+    "ChIJn4XNyagalVQRywI8ysKemTE",
+    "ChIJ-UJwUBcQlVQReQvFgVNkyN0",
+    "ChIJzZtgsRAQlVQRD8IRi3qYy2g",
+    "ChIJvTg6URcQlVQRel-EsQdUzDo",
+    "ChIJd7IqhIcPlVQRGajeeAhT338",
+    "ChIJATd2hIcPlVQRQ_89XoSedA8"
+  ];
+}
