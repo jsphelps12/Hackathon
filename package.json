@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.2",
     "@types/node": "^20.10.6",
     "cosine-similarity": "^1.0.1",
     "csv-parser": "^3.0.0",
